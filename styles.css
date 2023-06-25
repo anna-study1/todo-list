@@ -1,0 +1,9 @@
+html, body{
+  margin: auto;
+  width: 640px; 
+  padding: 20px;
+  background-image: url("i/notes.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+}
