@@ -3,14 +3,18 @@ submit.addEventListener("click", saveAndShowNotes);
 let notes = [];
 
 
-
-
 function saveAndShowNotes() {
     saveNote();
     clearInputNote();
+    showNotes();
+}
+
+function showNotes() {
     fillTableNotes();
     addEventToCheckboxes();
+    addEventToDeleteButtons();
 }
+
 
 function saveNote() {
     let text = document.getElementById('new-note').value;
@@ -27,10 +31,11 @@ function clearInputNote() {
 }
 
 function fillTableNotes() {
+    
     let table = document.getElementById('table');
     table.innerHTML = '';
     for (let i = 0; i < notes.length; i++) {
-        table.innerHTML = table.innerHTML + '<tr div class="p-2 mb-2 bg-primary text-white"><td>' +
+        table.innerHTML = table.innerHTML + '<tr><td>' +
         '<input '+
         'id="checkbox-' + i + '" '+
         'type="checkbox"'+
@@ -40,7 +45,9 @@ function fillTableNotes() {
         '<td ' +
         getStyleLineThrough(notes[i].isCompleted) +
         'id="note-text-' + i + '">' +
-        (i+1) + '. '+ notes[i].text  +'</td></tr></>';
+        (i+1) + '. '+ notes[i].text  +'</td>'+
+        '<td><button type="button" id="btnDelete-' +i + '" class="btn btn-secondary">Del</button></td>'+
+        '</tr>';
 
     }
 }
@@ -67,15 +74,28 @@ function addEventToCheckboxes() {
 
 function markComplete() {
     const isChecked = this.checked;
-    let number = this.id.split('-')[1];
+    let index = this.id.split('-')[1];
 
     if (isChecked) {
-        notes[number].isCompleted = true;
-        document.querySelector('#note-text-' + number).style.textDecoration = "line-through";
+        notes[index].isCompleted = true;
+        document.querySelector('#note-text-' + index).style.textDecoration = "line-through";
     } else {
-        notes[number].isCompleted = false;
-        document.querySelector('#note-text-' + number).style.textDecoration = "none";
+        notes[index].isCompleted = false;
+        document.querySelector('#note-text-' + index).style.textDecoration = "none";
     }
+}
+
+function addEventToDeleteButtons(){
+    let deleteButtons = document.querySelectorAll("[id^='btnDelete-']");
+    for (let i = 0; i < deleteButtons.length; i++) {
+        deleteButtons[i].addEventListener("click", deleteNote);
+    }
+}
+
+function deleteNote() {
+    let index = this.id.split('-')[1];
+    notes.splice(index, 1);
+    showNotes();
 }
 
 
