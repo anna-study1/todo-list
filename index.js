@@ -1,7 +1,15 @@
 let submit = document.getElementById('submit');
 submit.addEventListener("click", saveAndShowNotes);
 let notes = [];
+let color;
 
+let colorButtons = document.querySelectorAll("[id^='bg-']");
+
+for (let i = 0; i < colorButtons.length; i++) {
+    colorButtons[i].addEventListener("click", function(){
+        color = this.id;
+    });
+}
 
 function saveAndShowNotes() {
     saveNote();
@@ -13,7 +21,8 @@ function showNotes() {
     fillTableNotes();
     addEventToCheckboxes();
     addEventToDeleteButtons();
-}
+    
+    }
 
 
 function saveNote() {
@@ -21,7 +30,8 @@ function saveNote() {
 
     let note = {
         text: text,
-        isCompleted: false
+        isCompleted: false,
+        color: color
     };
     notes.push(note);
 }
@@ -42,7 +52,7 @@ function fillTableNotes() {
         getStyleCheckBox(notes[i].isCompleted) +
         '>'+
         '</td>' +
-        '<td ' +
+        '<td class="text-white p-3 mb-2 '+notes[i].color+'"' +
         getStyleLineThrough(notes[i].isCompleted) +
         'id="note-text-' + i + '">' +
         (i+1) + '. '+ notes[i].text  +'</td>'+
@@ -97,5 +107,6 @@ function deleteNote() {
     notes.splice(index, 1);
     showNotes();
 }
+
 
 
