@@ -12,7 +12,7 @@ import javax.persistence.*;
 @ToString(callSuper = true)
 @SuperBuilder
 @Entity
-@Table(name = "rc_post")
+@Table(name = "rc_note")
 public class Note extends AbstractBaseEntity{
 
     @Column(name = "text", nullable = false)
@@ -21,7 +21,7 @@ public class Note extends AbstractBaseEntity{
     @Column(name = "color", nullable = false)
     private String color;
 
-    @Column(name = "is_ompleted", nullable = false)
+    @Column(name = "is_completed", nullable = false)
     private Boolean isCompleted;
 
 
