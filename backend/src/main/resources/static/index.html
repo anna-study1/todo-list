@@ -1,0 +1,21 @@
+<html>
+<body>
+<h1><u>Rest</u></h1>
+<br>
+<h3>getNotes</h3>
+<a target="_blank" href="http://localhost:8080/rest/notes">http://localhost:8080/rest/notes</a><br>
+curl -s -i http://localhost:8080/rest/notes
+
+
+
+
+<br>
+<br>
+<h3>create NOTE</h3>
+curl -s -i -X POST -d '{"text":"New note", "color":"red", "isCompleted":true}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/rest/notes
+<br>
+<br>
+
+
+</body>
+</html>

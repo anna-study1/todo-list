@@ -1,0 +1,60 @@
+
+
+#logging:
+#  level:
+#    org.hibernate.orm.jdbc.bind: trace       #For Hibernate 6
+#    org.hibernate.type.descriptor.sql:  trace #For Hibernate 5
+#    org.hibernate.SQL:                  DEBUG
+#    org.springframework.data.jpa:       DEBUG
+
+
+
+
+sb_demo01:
+  prop1: app-dev.yml
+
+
+
+
+spring:
+  devtools:
+    restart:
+      enabled: true
+      additional-exclude: static/**,.h2.server.properties
+    livereload:
+      enabled: true
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:h2:file:./target/h2db/db/todo_list;DB_CLOSE_DELAY=-1;MODE=LEGACY
+    username: myapp
+    password:
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+
+
+  jpa:
+    hibernate:
+      ddl-auto: none                         # will create tables based on models(Entity) and how
+    defer-datasource-initialization: true    # Jpa will create tables based on model and data will come from file data.sql
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+
+  sql:
+    init:
+      mode: always                            # will creates tables on schema.sql or models and will insert data from data.sql
+                                              # https://www.baeldung.com/spring-boot-data-sql-and-schema-sql
+      schema-locations: classpath:/config/dev/db/schema-dev.sql
+      data-locations: classpath:/config/dev/db/data-dev.sql
+  h2:
+    console:
+      # disable spring boot built-in h2-console since we start it manually with correct configuration
+      enabled: false
+
+
+
+
+

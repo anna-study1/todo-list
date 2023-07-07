@@ -6,7 +6,7 @@ let color;
 let colorButtons = document.querySelectorAll("[id^='bg-']");
 
 for (let i = 0; i < colorButtons.length; i++) {
-    colorButtons[i].addEventListener("click", function(){
+    colorButtons[i].addEventListener("click", function () {
         color = this.id;
     });
 }
@@ -21,9 +21,24 @@ function showNotes() {
     fillTableNotes();
     addEventToCheckboxes();
     addEventToDeleteButtons();
-    
-    }
 
+}
+
+
+function sendNoteToServer(note) {
+    alert('sendnote');
+
+    // Simple POST request with a JSON body using fetch
+    //const element = document.querySelector('#post-request .article-id');
+    const requestOptions = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(note)
+    };
+    fetch('http://localhost:8080/rest/notes', requestOptions)
+        .then(response => response.json())
+        .then(data => console.log(data.id) );
+}
 
 function saveNote() {
     let text = document.getElementById('new-note').value;
@@ -33,6 +48,9 @@ function saveNote() {
         isCompleted: false,
         color: color
     };
+
+    sendNoteToServer(note);
+
     notes.push(note);
 }
 
@@ -41,35 +59,36 @@ function clearInputNote() {
 }
 
 function fillTableNotes() {
-    
+
     let table = document.getElementById('table');
     table.innerHTML = '';
     for (let i = 0; i < notes.length; i++) {
         table.innerHTML = table.innerHTML + '<tr><td>' +
-        '<input '+
-        'id="checkbox-' + i + '" '+
-        'type="checkbox"'+
-        getStyleCheckBox(notes[i].isCompleted) +
-        '>'+
-        '</td>' +
-        '<td class="text-white p-3 mb-2 '+notes[i].color+'"' +
-        getStyleLineThrough(notes[i].isCompleted) +
-        'id="note-text-' + i + '">' +
-        (i+1) + '. '+ notes[i].text  +'</td>'+
-        '<td><button type="button" id="btnDelete-' +i + '" class="btn btn-secondary">Del</button></td>'+
-        '</tr>';
+            '<input ' +
+            'id="checkbox-' + i + '" ' +
+            'type="checkbox"' +
+            getStyleCheckBox(notes[i].isCompleted) +
+            '>' +
+            '</td>' +
+            '<td class="text-white p-3 mb-2 ' + notes[i].color + '"' +
+            getStyleLineThrough(notes[i].isCompleted) +
+            'id="note-text-' + i + '">' +
+            (i + 1) + '. ' + notes[i].text + '</td>' +
+            '<td><button type="button" id="btnDelete-' + i + '" class="btn btn-secondary">Del</button></td>' +
+            '</tr>';
 
     }
 }
-function getStyleCheckBox(isComplete){
-    if (isComplete){
+
+function getStyleCheckBox(isComplete) {
+    if (isComplete) {
         return 'checked';
     }
     return '';
 }
 
-function getStyleLineThrough(isComplete){
-    if (isComplete){
+function getStyleLineThrough(isComplete) {
+    if (isComplete) {
         return 'style="text-decoration: line-through" ';
     }
     return '';
@@ -95,7 +114,7 @@ function markComplete() {
     }
 }
 
-function addEventToDeleteButtons(){
+function addEventToDeleteButtons() {
     let deleteButtons = document.querySelectorAll("[id^='btnDelete-']");
     for (let i = 0; i < deleteButtons.length; i++) {
         deleteButtons[i].addEventListener("click", deleteNote);
