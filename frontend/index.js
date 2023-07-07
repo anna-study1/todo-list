@@ -26,7 +26,7 @@ function showNotes() {
 
 
 function sendNoteToServer(note) {
-    alert('sendnote');
+    //alert('sendnote');
 
     // Simple POST request with a JSON body using fetch
     //const element = document.querySelector('#post-request .article-id');
