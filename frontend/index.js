@@ -25,19 +25,19 @@ function showNotes() {
 }
 
 
-function sendNoteToServer() {
+function sendNoteToServer(note) {
     alert('sendnote');
 
     // Simple POST request with a JSON body using fetch
-    const element = document.querySelector('#post-request .article-id');
+    //const element = document.querySelector('#post-request .article-id');
     const requestOptions = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({title: 'Fetch POST Request Example'})
+        body: JSON.stringify(note)
     };
-    fetch('https://reqres.in/api/articles', requestOptions)
+    fetch('http://localhost:8080/rest/notes', requestOptions)
         .then(response => response.json())
-        .then(data => element.innerHTML = data.id);
+        .then(data => console.log(data.id) );
 }
 
 function saveNote() {
@@ -49,7 +49,7 @@ function saveNote() {
         color: color
     };
 
-    sendNoteToServer();
+    sendNoteToServer(note);
 
     notes.push(note);
 }
