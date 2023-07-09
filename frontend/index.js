@@ -40,6 +40,21 @@ function sendNoteToServer(note) {
         .then(data => console.log(data.id) );
 }
 
+function getNoteFromServer() {
+    const requestOptions = {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json'},
+        
+    };
+    fetch('http://localhost:8080/rest/notes', requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            notes = data;
+        });
+      
+}
+
 function saveNote() {
     let text = document.getElementById('new-note').value;
 
@@ -48,10 +63,9 @@ function saveNote() {
         isCompleted: false,
         color: color
     };
-
     sendNoteToServer(note);
+    getNoteFromServer();
 
-    notes.push(note);
 }
 
 function clearInputNote() {
@@ -59,6 +73,8 @@ function clearInputNote() {
 }
 
 function fillTableNotes() {
+
+    console.log("test" + notes);
 
     let table = document.getElementById('table');
     table.innerHTML = '';
