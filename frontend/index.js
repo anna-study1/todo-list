@@ -25,20 +25,6 @@ function showNotes() {
 }
 
 
-function sendNoteToServer(note) {
-    alert('sendnote');
-
-    // Simple POST request with a JSON body using fetch
-    //const element = document.querySelector('#post-request .article-id');
-    const requestOptions = {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(note)
-    };
-    fetch('http://localhost:8080/rest/notes', requestOptions)
-        .then(response => response.json())
-        .then(data => console.log(data.id) );
-}
 
 function saveNote() {
     let text = document.getElementById('new-note').value;
@@ -49,16 +35,51 @@ function saveNote() {
         color: color
     };
 
-    sendNoteToServer(note);
-
-    notes.push(note);
+    sendNoteToServer(note)
+        .then(getNoteFromServer)
+        .then(showNotes)
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
+
+function sendNoteToServer(note) {
+    const requestOptions = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(note)
+    };
+
+    return fetch('http://localhost:8080/rest/notes', requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.id);
+            return data; // Pass the data to the next promise in the chain
+        });
+}
+function getNoteFromServer() {
+    const requestOptions = {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json'},
+    };
+
+    return fetch('http://localhost:8080/rest/notes', requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            notes = data;
+            return data; // Pass the data to the next promise in the chain
+        });
+}
+
 
 function clearInputNote() {
     document.getElementById('new-note').value = '';
 }
 
 function fillTableNotes() {
+
+    console.log("test" + notes);
 
     let table = document.getElementById('table');
     table.innerHTML = '';
@@ -126,6 +147,11 @@ function deleteNote() {
     notes.splice(index, 1);
     showNotes();
 }
+
+
+
+
+
 
 
 
