@@ -20,4 +20,8 @@ public class NoteService {
     public Note create(Note note) {
         return noteRepository.save(note);
     }
+
+    public void deleteById(long id) {
+        noteRepository.deleteById(id);
+    }
 }
