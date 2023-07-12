@@ -148,8 +148,27 @@ function addEventToDeleteButtons() {
 
 function deleteNote() {
     let index = this.id.split('-')[1];
-    notes.splice(index, 1);
-    showNotes();
+    let id = notes[index].id;
+
+    deleteFromServer(id)
+        .then(getNoteFromServer)
+        .then(showNotes)
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function deleteFromServer(id) {
+    const requestOptions = {
+        method: 'DELETE',
+        headers: {'Content-Type': 'application/json'},
+    };
+
+    return fetch('http://localhost:8080/rest/notes/' + id, requestOptions)
+        // .then(response => response.json())
+        // .then(data => {
+        //     return data; // Pass the data to the next promise in the chain
+        // });
 }
 
 
