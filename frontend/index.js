@@ -1,3 +1,7 @@
+window.addEventListener('load', (event) => {
+    saveAndShowNotes();
+});
+
 let submit = document.getElementById('submit');
 submit.addEventListener("click", saveAndShowNotes);
 let notes = [];
@@ -147,7 +151,6 @@ function deleteNote() {
     notes.splice(index, 1);
     showNotes();
 }
-
 
 
 
