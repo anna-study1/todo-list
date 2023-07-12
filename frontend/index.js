@@ -1,6 +1,10 @@
 window.addEventListener('load', (event) => {
-    saveAndShowNotes();
+    //saveAndShowNotes();
+    getNoteFromServer()
+    .then(showNotes);
 });
+
+
 
 let submit = document.getElementById('submit');
 submit.addEventListener("click", saveAndShowNotes);
@@ -82,8 +86,6 @@ function clearInputNote() {
 }
 
 function fillTableNotes() {
-
-    console.log("test" + notes);
 
     let table = document.getElementById('table');
     table.innerHTML = '';
