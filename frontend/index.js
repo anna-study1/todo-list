@@ -1,10 +1,7 @@
 window.addEventListener('load', (event) => {
-    //saveAndShowNotes();
     getNoteFromServer()
     .then(showNotes);
 });
-
-
 
 let submit = document.getElementById('submit');
 submit.addEventListener("click", saveAndShowNotes);
@@ -31,8 +28,6 @@ function showNotes() {
     addEventToDeleteButtons();
 
 }
-
-
 
 function saveNote() {
     let text = document.getElementById('new-note').value;
@@ -79,7 +74,6 @@ function getNoteFromServer() {
             return data; // Pass the data to the next promise in the chain
         });
 }
-
 
 function clearInputNote() {
     document.getElementById('new-note').value = '';
@@ -139,7 +133,15 @@ function markComplete() {
         notes[index].isCompleted = false;
         document.querySelector('#note-text-' + index).style.textDecoration = "none";
     }
+
+    sendNoteToServer(notes[index])
+    .then(getNoteFromServer)
+    .then(showNotes)
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
+
 
 function addEventToDeleteButtons() {
     let deleteButtons = document.querySelectorAll("[id^='btnDelete-']");
