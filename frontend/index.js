@@ -1,5 +1,6 @@
 window.addEventListener('load', (event) => {
-    saveAndShowNotes();
+    getNoteFromServer()
+    .then(showNotes);
 });
 
 let submit = document.getElementById('submit');
@@ -27,8 +28,6 @@ function showNotes() {
     addEventToDeleteButtons();
 
 }
-
-
 
 function saveNote() {
     let text = document.getElementById('new-note').value;
@@ -61,6 +60,19 @@ function sendNoteToServer(note) {
             return data; // Pass the data to the next promise in the chain
         });
 }
+
+function updateNoteOnServer(note) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(note)
+    };
+
+    return fetch('http://localhost:8080/rest/notes/' + note.id, requestOptions);
+
+}
+
+
 function getNoteFromServer() {
     const requestOptions = {
         method: 'GET',
@@ -76,14 +88,11 @@ function getNoteFromServer() {
         });
 }
 
-
 function clearInputNote() {
     document.getElementById('new-note').value = '';
 }
 
 function fillTableNotes() {
-
-    console.log("test" + notes);
 
     let table = document.getElementById('table');
     table.innerHTML = '';
@@ -137,7 +146,15 @@ function markComplete() {
         notes[index].isCompleted = false;
         document.querySelector('#note-text-' + index).style.textDecoration = "none";
     }
+
+    updateNoteOnServer(notes[index])
+    .then(getNoteFromServer)
+    .then(showNotes)
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
+
 
 function addEventToDeleteButtons() {
     let deleteButtons = document.querySelectorAll("[id^='btnDelete-']");
@@ -164,11 +181,8 @@ function deleteFromServer(id) {
         headers: {'Content-Type': 'application/json'},
     };
 
-    return fetch('http://localhost:8080/rest/notes/' + id, requestOptions)
-        // .then(response => response.json())
-        // .then(data => {
-        //     return data; // Pass the data to the next promise in the chain
-        // });
+    return fetch('http://localhost:8080/rest/notes/' + id, requestOptions);
+
 }
 
 
