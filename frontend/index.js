@@ -1,3 +1,4 @@
+let domain = 'http://192.168.3.104:8080';
 window.addEventListener('load', (event) => {
     getNoteFromServer()
     .then(showNotes);
@@ -53,7 +54,7 @@ function sendNoteToServer(note) {
         body: JSON.stringify(note)
     };
 
-    return fetch('http://localhost:8080/rest/notes', requestOptions)
+    return fetch(domain+ '/rest/notes', requestOptions)
         .then(response => response.json())
         .then(data => {
             console.log(data.id);
@@ -68,7 +69,7 @@ function updateNoteOnServer(note) {
         body: JSON.stringify(note)
     };
 
-    return fetch('http://localhost:8080/rest/notes/' + note.id, requestOptions);
+    return fetch(domain+ '/rest/notes/' + note.id, requestOptions);
 
 }
 
@@ -79,7 +80,7 @@ function getNoteFromServer() {
         headers: {'Content-Type': 'application/json'},
     };
 
-    return fetch('http://localhost:8080/rest/notes', requestOptions)
+    return fetch(domain+ '/rest/notes', requestOptions)
         .then(response => response.json())
         .then(data => {
             console.log(data);
@@ -108,7 +109,7 @@ function fillTableNotes() {
             getStyleLineThrough(notes[i].isCompleted) +
             'id="note-text-' + i + '">' +
             (i + 1) + '. ' + notes[i].text + '</td>' +
-            '<td><button type="button" id="btnDelete-' + i + '" class="btn btn-secondary">Del</button></td>' +
+            '<td ><button type="button" id="btnDelete-' + i + '" class="btn btn-secondary">Del</button></td>' +
             '</tr>';
 
     }
@@ -181,7 +182,7 @@ function deleteFromServer(id) {
         headers: {'Content-Type': 'application/json'},
     };
 
-    return fetch('http://localhost:8080/rest/notes/' + id, requestOptions);
+    return fetch(domain+ '/rest/notes/' + id, requestOptions);
 
 }
 
