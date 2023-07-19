@@ -73,7 +73,6 @@ function updateNoteOnServer(note) {
 
 }
 
-
 function getNoteFromServer() {
     const requestOptions = {
         method: 'GET',
@@ -109,7 +108,8 @@ function fillTableNotes() {
             getStyleLineThrough(notes[i].isCompleted) +
             'id="note-text-' + i + '">' +
             (i + 1) + '. ' + notes[i].text + '</td>' +
-            '<td ><button type="button" id="btnDelete-' + i + '" class="btn btn-secondary">Del</button></td>' +
+            '<td ><button type="button" id="btnEdit-' + i + '" class="btn btn-secondary custom-btn">Edit</button></td>' +
+            '<td ><button type="button" id="btnDelete-' + i + '" class="btn btn-secondary custom-btn">Delete</button></td>' +
             '</tr>';
 
     }
@@ -186,6 +186,11 @@ function deleteFromServer(id) {
 
 }
 
+
+
+function changeText() {
+   
+}
 
 
 
