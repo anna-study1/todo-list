@@ -27,6 +27,8 @@ function showNotes() {
     fillTableNotes();
     addEventToCheckboxes();
     addEventToDeleteButtons();
+    addEventToEditButtons();
+
 
 }
 
@@ -186,9 +188,34 @@ function deleteFromServer(id) {
 
 }
 
+function addEventToEditButtons() {
+    let editButtons = document.querySelectorAll("[id^='btnEdit-']");
+    for (let i = 0; i < editButtons.length; i++) {
+        editButtons[i].addEventListener("click", editNote);
+    }
+}
 
+function editNote(){
+    let index = this.id.split('-')[1];
+    let tdWithText = document.querySelectorAll(".text-white");
+    tdWithText[index].innerHTML= "";
 
-function changeText() {
+    let input = document.createElement("input");
+    input.setAttribute("type", "text");
+    input.setAttribute("value", notes[index].text);
+    tdWithText[index].appendChild(input);
+
+    let saveBtn = document.createElement("button");
+    saveBtn.setAttribute("type", "button");
+    saveBtn.innerHTML= "V";
+    saveBtn.setAttribute("class", "btn btn-secondary custom-btn");
+    tdWithText[index].appendChild(saveBtn);
+
+    let cancelBtn = document.createElement("button");
+    cancelBtn.setAttribute("type", "button");
+    cancelBtn.innerHTML= "X";
+    cancelBtn.setAttribute("class", "btn btn-secondary custom-btn");
+    tdWithText[index].appendChild(cancelBtn);
    
 }
 
