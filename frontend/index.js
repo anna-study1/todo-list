@@ -1,4 +1,4 @@
-let domain = 'http://192.168.3.104:8080';
+let domain = 'http://192.168.3.105:8080';
 window.addEventListener('load', (event) => {
     getNoteFromServer()
     .then(showNotes);
@@ -28,8 +28,6 @@ function showNotes() {
     addEventToCheckboxes();
     addEventToDeleteButtons();
     addEventToEditButtons();
-
-
 }
 
 function saveNote() {
@@ -70,7 +68,6 @@ function updateNoteOnServer(note) {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(note)
     };
-
     return fetch(domain+ '/rest/notes/' + note.id, requestOptions);
 
 }
@@ -113,7 +110,6 @@ function fillTableNotes() {
             '<td ><button type="button" id="btnEdit-' + i + '" class="btn btn-secondary custom-btn">Edit</button></td>' +
             '<td ><button type="button" id="btnDelete-' + i + '" class="btn btn-secondary custom-btn">Delete</button></td>' +
             '</tr>';
-
     }
 }
 
@@ -149,8 +145,11 @@ function markComplete() {
         notes[index].isCompleted = false;
         document.querySelector('#note-text-' + index).style.textDecoration = "none";
     }
+    updateAndShow(notes[index]);
+}
 
-    updateNoteOnServer(notes[index])
+function updateAndShow(note) {
+    updateNoteOnServer(note)
     .then(getNoteFromServer)
     .then(showNotes)
     .catch(error => {
@@ -207,16 +206,32 @@ function editNote(){
 
     let saveBtn = document.createElement("button");
     saveBtn.setAttribute("type", "button");
-    saveBtn.innerHTML= "V";
-    saveBtn.setAttribute("class", "btn btn-secondary custom-btn");
+    saveBtn.innerHTML= "&#10003;";
+    saveBtn.setAttribute("class", "btn btn-secondary custom-btn update");
     tdWithText[index].appendChild(saveBtn);
+    addEventToSaveButtons(index, input);
+
 
     let cancelBtn = document.createElement("button");
     cancelBtn.setAttribute("type", "button");
-    cancelBtn.innerHTML= "X";
+    cancelBtn.innerHTML= "&#128473;";
     cancelBtn.setAttribute("class", "btn btn-secondary custom-btn");
     tdWithText[index].appendChild(cancelBtn);
    
+}
+
+function addEventToSaveButtons(index, input) {
+    let saveButtons = document.querySelectorAll(".update");
+    for (let i = 0; i < saveButtons.length; i++) {
+        saveButtons[i].addEventListener("click", () => { updateNote(index, input); });
+    }
+}
+
+
+function updateNote(index, input) {
+    let text = input.value;
+    notes[index].text = text;
+    updateAndShow(notes[index]);
 }
 
 
