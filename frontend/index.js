@@ -106,7 +106,7 @@ function fillTableNotes() {
             '<td class="text-white p-3 mb-2 ' + notes[i].color + '"' +
             getStyleLineThrough(notes[i].isCompleted) +
             'id="note-text-' + i + '">' +
-            (i + 1) + '. ' + notes[i].text + '</td>' +
+            '<div class="divText">' + (i + 1) + '. ' + notes[i].text + '</div></td>' +
             '<td ><button type="button" id="btnEdit-' + i + '" class="btn btn-secondary custom-btn">Edit</button></td>' +
             '<td ><button type="button" id="btnDelete-' + i + '" class="btn btn-secondary custom-btn">Delete</button></td>' +
             '</tr>';
@@ -197,7 +197,8 @@ function addEventToEditButtons() {
 function editNote(){
     let index = this.id.split('-')[1];
     let tdWithText = document.querySelectorAll(".text-white");
-    tdWithText[index].innerHTML= "";
+    let divWithTexts = document.querySelectorAll(".divText");
+    divWithTexts[index].style.display = "none";
 
     let input = document.createElement("input");
     input.setAttribute("type", "text");
@@ -211,28 +212,37 @@ function editNote(){
     tdWithText[index].appendChild(saveBtn);
     addEventToSaveButtons(index, input);
 
-
     let cancelBtn = document.createElement("button");
     cancelBtn.setAttribute("type", "button");
     cancelBtn.innerHTML= "&#128473;";
-    cancelBtn.setAttribute("class", "btn btn-secondary custom-btn");
+    cancelBtn.setAttribute("class", "btn btn-secondary custom-btn cancel");
     tdWithText[index].appendChild(cancelBtn);
-   
-}
+    addEventToCancelButton(divWithTexts[index], input, saveBtn, cancelBtn);
+ }
 
-function addEventToSaveButtons(index, input) {
-    let saveButtons = document.querySelectorAll(".update");
-    for (let i = 0; i < saveButtons.length; i++) {
-        saveButtons[i].addEventListener("click", () => { updateNote(index, input); });
-    }
+function addEventToSaveButtons(index, input){
+    let saveButton = document.querySelector(".update");
+    saveButton.addEventListener("click", () => { updateNote(index, input); });
 }
-
 
 function updateNote(index, input) {
     let text = input.value;
     notes[index].text = text;
     updateAndShow(notes[index]);
 }
+
+function addEventToCancelButton(divWithText, input, saveBtn, cancelBtn){
+    let cancelButton = document.querySelector(".cancel");
+     cancelButton.addEventListener("click", () => { cancelNote(divWithText, input, saveBtn, cancelBtn); });
+}
+
+function cancelNote(divWithText, input, saveBtn, cancelBtn){
+    divWithText.style.display = "block";
+    input.style.display = "none";
+    saveBtn.style.display = "none";
+    cancelBtn.style.display = "none";
+}
+
 
 
 
