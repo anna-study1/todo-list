@@ -1,3 +1,5 @@
+let domain = 'http://192.168.3.105:8080';
+
 function sendNoteToServer(note) {
     const requestOptions = {
         method: 'POST',

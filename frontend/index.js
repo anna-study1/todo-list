@@ -1,11 +1,10 @@
-let domain = 'http://192.168.3.105:8080';
 window.addEventListener('load', (event) => {
     getNoteFromServer()
     .then(showNotes);
+
 });
 
-let submit = document.getElementById('submit');
-submit.addEventListener("click", saveAndShowNotes);
+document.getElementById('submit').addEventListener("click", saveAndShowNotes);
 let notes = [];
 let color;
 
@@ -28,6 +27,7 @@ function showNotes() {
     addEventToCheckboxes();
     addEventToDeleteButtons();
     addEventToEditButtons();
+    showCount();
 }
 
 function saveNote() {
@@ -46,8 +46,6 @@ function saveNote() {
             console.error('Error:', error);
         });
 }
-
-
 
 function clearInputNote() {
     document.getElementById('new-note').value = '';
@@ -119,7 +117,6 @@ function updateAndShow(note) {
     });
 }
 
-
 function addEventToDeleteButtons() {
     let deleteButtons = document.querySelectorAll("[id^='btnDelete-']");
     for (let i = 0; i < deleteButtons.length; i++) {
@@ -138,7 +135,6 @@ function deleteNote() {
             console.error('Error:', error);
         });
 }
-
 
 
 function addEventToEditButtons() {
@@ -196,6 +192,25 @@ function cancelNote(divWithText, input, saveBtn, cancelBtn){
     saveBtn.style.display = "none";
     cancelBtn.style.display = "none";
 }
+
+function showCount() {
+    let total = document.querySelector('.total');
+
+    total.innerHTML = "Notes total: " + notes.length;
+
+    let complete = document.querySelector('.complete');
+
+    let notesCompleted = notes.filter(function (el) {
+        return el.isCompleted;
+    }
+    );
+    complete.innerHTML = "Notes completed: " + notesCompleted.length;
+
+    let uncomplete = document.querySelector('.uncomplete');
+    uncomplete.innerHTML = "Notes uncompleted: " + (notes.length - notesCompleted.length);
+}
+
+
 
 
 
