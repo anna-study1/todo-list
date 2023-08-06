@@ -1,13 +1,13 @@
-let domain = 'http://192.168.3.104:8080';
 window.addEventListener('load', (event) => {
     getNoteFromServer()
     .then(showNotes);
+
 });
 
-let submit = document.getElementById('submit');
-submit.addEventListener("click", saveAndShowNotes);
+document.getElementById('submit').addEventListener("click", saveAndShowNotes);
 let notes = [];
 let color;
+let now = new Date();
 
 let colorButtons = document.querySelectorAll("[id^='bg-']");
 
@@ -27,7 +27,8 @@ function showNotes() {
     fillTableNotes();
     addEventToCheckboxes();
     addEventToDeleteButtons();
-
+    addEventToEditButtons();
+    showCount();
 }
 
 function saveNote() {
@@ -36,7 +37,8 @@ function saveNote() {
     let note = {
         text: text,
         isCompleted: false,
-        color: color
+        color: color,
+        date: now
     };
 
     sendNoteToServer(note)
@@ -44,47 +46,6 @@ function saveNote() {
         .then(showNotes)
         .catch(error => {
             console.error('Error:', error);
-        });
-}
-
-function sendNoteToServer(note) {
-    const requestOptions = {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(note)
-    };
-
-    return fetch(domain+ '/rest/notes', requestOptions)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.id);
-            return data; // Pass the data to the next promise in the chain
-        });
-}
-
-function updateNoteOnServer(note) {
-    const requestOptions = {
-        method: 'PUT',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(note)
-    };
-
-    return fetch(domain+ '/rest/notes/' + note.id, requestOptions);
-
-}
-
-function getNoteFromServer() {
-    const requestOptions = {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json'},
-    };
-
-    return fetch(domain+ '/rest/notes', requestOptions)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            notes = data;
-            return data; // Pass the data to the next promise in the chain
         });
 }
 
@@ -107,11 +68,11 @@ function fillTableNotes() {
             '<td class="text-white p-3 mb-2 ' + notes[i].color + '"' +
             getStyleLineThrough(notes[i].isCompleted) +
             'id="note-text-' + i + '">' +
-            (i + 1) + '. ' + notes[i].text + '</td>' +
+            '<div class="divText">' + (i + 1) + '. ' + notes[i].text + '</div></td>' +
             '<td ><button type="button" id="btnEdit-' + i + '" class="btn btn-secondary custom-btn">Edit</button></td>' +
             '<td ><button type="button" id="btnDelete-' + i + '" class="btn btn-secondary custom-btn">Delete</button></td>' +
+            '<td>' + notes[i].date +'</td>' +
             '</tr>';
-
     }
 }
 
@@ -147,15 +108,17 @@ function markComplete() {
         notes[index].isCompleted = false;
         document.querySelector('#note-text-' + index).style.textDecoration = "none";
     }
+    updateAndShow(notes[index]);
+}
 
-    updateNoteOnServer(notes[index])
+function updateAndShow(note) {
+    updateNoteOnServer(note)
     .then(getNoteFromServer)
     .then(showNotes)
     .catch(error => {
         console.error('Error:', error);
     });
 }
-
 
 function addEventToDeleteButtons() {
     let deleteButtons = document.querySelectorAll("[id^='btnDelete-']");
@@ -176,21 +139,84 @@ function deleteNote() {
         });
 }
 
-function deleteFromServer(id) {
-    const requestOptions = {
-        method: 'DELETE',
-        headers: {'Content-Type': 'application/json'},
-    };
 
-    return fetch(domain+ '/rest/notes/' + id, requestOptions);
+function addEventToEditButtons() {
+    let editButtons = document.querySelectorAll("[id^='btnEdit-']");
+    for (let i = 0; i < editButtons.length; i++) {
+        editButtons[i].addEventListener("click", editNote);
+    }
+}
 
+function editNote(){
+    let index = this.id.split('-')[1];
+    let tdWithText = document.querySelectorAll(".text-white");
+    let divWithTexts = document.querySelectorAll(".divText");
+    divWithTexts[index].style.display = "none";
+
+    let input = document.createElement("input");
+    input.setAttribute("type", "text");
+    input.setAttribute("value", notes[index].text);
+    tdWithText[index].appendChild(input);
+
+    let saveBtn = document.createElement("button");
+    saveBtn.setAttribute("type", "button");
+    saveBtn.innerHTML= "&#10003;";
+    saveBtn.setAttribute("class", "btn btn-secondary custom-btn update");
+    tdWithText[index].appendChild(saveBtn);
+    addEventToSaveButtons(index, input);
+
+    let cancelBtn = document.createElement("button");
+    cancelBtn.setAttribute("type", "button");
+    cancelBtn.innerHTML= "&#128473;";
+    cancelBtn.setAttribute("class", "btn btn-secondary custom-btn cancel");
+    tdWithText[index].appendChild(cancelBtn);
+    addEventToCancelButton(divWithTexts[index], input, saveBtn, cancelBtn);
+ }
+
+function addEventToSaveButtons(index, input){
+    let saveButton = document.querySelector(".update");
+    saveButton.addEventListener("click", () => { updateNote(index, input); });
+}
+
+function updateNote(index, input) {
+    let text = input.value;
+    notes[index].text = text;
+    updateAndShow(notes[index]);
+}
+
+function addEventToCancelButton(divWithText, input, saveBtn, cancelBtn){
+    let cancelButton = document.querySelector(".cancel");
+     cancelButton.addEventListener("click", () => { cancelNote(divWithText, input, saveBtn, cancelBtn); });
+}
+
+function cancelNote(divWithText, input, saveBtn, cancelBtn){
+    divWithText.style.display = "block";
+    input.style.display = "none";
+    saveBtn.style.display = "none";
+    cancelBtn.style.display = "none";
+}
+
+function showCount() {
+    let total = document.querySelector('.total');
+
+    total.innerHTML = "Notes total: " + notes.length;
+
+    let complete = document.querySelector('.complete');
+
+    let notesCompleted = notes.filter(function (el) {
+        return el.isCompleted;
+    }
+    );
+    complete.innerHTML = "Notes completed: " + notesCompleted.length;
+
+    let uncomplete = document.querySelector('.uncomplete');
+    uncomplete.innerHTML = "Notes uncompleted: " + (notes.length - notesCompleted.length);
 }
 
 
 
-function changeText() {
-   
-}
+
+
 
 
 
