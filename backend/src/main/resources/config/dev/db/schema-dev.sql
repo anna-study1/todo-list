@@ -22,5 +22,6 @@ CREATE TABLE rc_note
     id               LONG DEFAULT NEXTVAL('global_seq') PRIMARY KEY,
     text             TEXT           NOT NULL,
     color            VARCHAR(30)    NOT NULL,
-    is_completed     BOOLEAN        NOT NULL
+    is_completed     BOOLEAN        NOT NULL,
+    date_time        TIMESTAMP      NOT NULL
 );

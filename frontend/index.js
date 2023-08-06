@@ -38,7 +38,7 @@ function saveNote() {
         text: text,
         isCompleted: false,
         color: color,
-        date: now
+        dateTime: now
     };
 
     sendNoteToServer(note)
@@ -71,7 +71,7 @@ function fillTableNotes() {
             '<div class="divText">' + (i + 1) + '. ' + notes[i].text + '</div></td>' +
             '<td ><button type="button" id="btnEdit-' + i + '" class="btn btn-secondary custom-btn">Edit</button></td>' +
             '<td ><button type="button" id="btnDelete-' + i + '" class="btn btn-secondary custom-btn">Delete</button></td>' +
-            '<td>' + notes[i].date +'</td>' +
+            '<td>' + notes[i].dateTime +'</td>' +
             '</tr>';
     }
 }
