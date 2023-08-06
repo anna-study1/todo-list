@@ -7,6 +7,7 @@ window.addEventListener('load', (event) => {
 document.getElementById('submit').addEventListener("click", saveAndShowNotes);
 let notes = [];
 let color;
+let now = new Date();
 
 let colorButtons = document.querySelectorAll("[id^='bg-']");
 
@@ -36,7 +37,8 @@ function saveNote() {
     let note = {
         text: text,
         isCompleted: false,
-        color: color
+        color: color,
+        date: now
     };
 
     sendNoteToServer(note)
@@ -69,6 +71,7 @@ function fillTableNotes() {
             '<div class="divText">' + (i + 1) + '. ' + notes[i].text + '</div></td>' +
             '<td ><button type="button" id="btnEdit-' + i + '" class="btn btn-secondary custom-btn">Edit</button></td>' +
             '<td ><button type="button" id="btnDelete-' + i + '" class="btn btn-secondary custom-btn">Delete</button></td>' +
+            '<td>' + notes[i].date +'</td>' +
             '</tr>';
     }
 }
@@ -209,6 +212,8 @@ function showCount() {
     let uncomplete = document.querySelector('.uncomplete');
     uncomplete.innerHTML = "Notes uncompleted: " + (notes.length - notesCompleted.length);
 }
+
+
 
 
 
