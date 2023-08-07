@@ -35,6 +35,7 @@ function getNoteFromServer() {
         .then(data => {
             console.log(data);
             notes = data;
+            notes.forEach( (note, index) => notes[index].dateTime = new Date(notes[index].dateTime));
             return data; // Pass the data to the next promise in the chain
         });
 }

@@ -40,7 +40,7 @@ function saveNote() {
         color: color,
         dateTime: now
     };
-
+ 
     sendNoteToServer(note)
         .then(getNoteFromServer)
         .then(showNotes)
@@ -71,7 +71,7 @@ function fillTableNotes() {
             '<div class="divText">' + (i + 1) + '. ' + notes[i].text + '</div></td>' +
             '<td ><button type="button" id="btnEdit-' + i + '" class="btn btn-secondary custom-btn">Edit</button></td>' +
             '<td ><button type="button" id="btnDelete-' + i + '" class="btn btn-secondary custom-btn">Delete</button></td>' +
-            '<td>' + notes[i].dateTime +'</td>' +
+            '<td>' + notes[i].dateTime.getFullYear() + ' '+(notes[i].dateTime.getMonth()+1) + ' '+ notes[i].dateTime.getDate() + ' '+ notes[i].dateTime.getHours() + ':'+ notes[i].dateTime.getMinutes() + '</td>' +
             '</tr>';
     }
 }
