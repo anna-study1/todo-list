@@ -29,6 +29,7 @@ function showNotes() {
     addEventToDeleteButtons();
     addEventToEditButtons();
     showCount();
+    addEventToDateButton();
 }
 
 function saveNote() {
@@ -40,7 +41,7 @@ function saveNote() {
         color: color,
         dateTime: now
     };
-
+ 
     sendNoteToServer(note)
         .then(getNoteFromServer)
         .then(showNotes)
@@ -57,6 +58,8 @@ function fillTableNotes() {
 
     let table = document.getElementById('table');
     table.innerHTML = '';
+
+    table.innerHTML ='<thead-dark><tr><th scope="col">&#10003;</th><th scope="col">Note</th><th scope="col">Edit</th><th scope="col">Delete</th><th scope="col"><button type="button" class="btn btn-link" id="dateButton">Date and Time</button></th></tr></thead-dark>';
     for (let i = 0; i < notes.length; i++) {
         table.innerHTML = table.innerHTML + '<tr><td>' +
             '<input ' +
@@ -71,7 +74,7 @@ function fillTableNotes() {
             '<div class="divText">' + (i + 1) + '. ' + notes[i].text + '</div></td>' +
             '<td ><button type="button" id="btnEdit-' + i + '" class="btn btn-secondary custom-btn">Edit</button></td>' +
             '<td ><button type="button" id="btnDelete-' + i + '" class="btn btn-secondary custom-btn">Delete</button></td>' +
-            '<td>' + notes[i].dateTime +'</td>' +
+            '<td>' + notes[i].dateTime.getFullYear() + ' '+(notes[i].dateTime.getMonth()+1) + ' '+ notes[i].dateTime.getDate() + ' '+ notes[i].dateTime.getHours() + ':'+ notes[i].dateTime.getMinutes() + '</td>' +
             '</tr>';
     }
 }
@@ -213,6 +216,15 @@ function showCount() {
     uncomplete.innerHTML = "Notes uncompleted: " + (notes.length - notesCompleted.length);
 }
 
+
+function addEventToDateButton() {
+    let date = document.getElementById('dateButton');
+    date.addEventListener("click", sortByDate);
+}
+
+function sortByDate(){
+    notes.sort((date1, date2) => date1 - date2);
+}
 
 
 
