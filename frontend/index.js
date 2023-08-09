@@ -29,6 +29,7 @@ function showNotes() {
     addEventToDeleteButtons();
     addEventToEditButtons();
     showCount();
+    addEventToDateButton();
 }
 
 function saveNote() {
@@ -57,6 +58,8 @@ function fillTableNotes() {
 
     let table = document.getElementById('table');
     table.innerHTML = '';
+
+    table.innerHTML ='<thead-dark><tr><th scope="col">&#10003;</th><th scope="col">Note</th><th scope="col">Edit</th><th scope="col">Delete</th><th scope="col"><button type="button" class="btn btn-link" id="dateButton">Date and Time</button></th></tr></thead-dark>';
     for (let i = 0; i < notes.length; i++) {
         table.innerHTML = table.innerHTML + '<tr><td>' +
             '<input ' +
@@ -213,6 +216,15 @@ function showCount() {
     uncomplete.innerHTML = "Notes uncompleted: " + (notes.length - notesCompleted.length);
 }
 
+
+function addEventToDateButton() {
+    let date = document.getElementById('dateButton');
+    date.addEventListener("click", sortByDate);
+}
+
+function sortByDate(){
+    notes.sort((date1, date2) => date1 - date2);
+}
 
 
 
