@@ -7,8 +7,8 @@
   
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #e6e4d9;
-    background-image: url('../images/notes.jpg');
+    background-color: lightgray;
+    /* background-image: url('../images/notes.jpg'); */
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
@@ -92,6 +92,7 @@
   /* Button Colors */
   #bg-danger {
     background-color: red;
+    
   }
   
   #bg-warning {

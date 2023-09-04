@@ -59,7 +59,7 @@ function fillTableNotes() {
     let table = document.getElementById('table');
     table.innerHTML = '';
 
-    table.innerHTML ='<thead-dark><tr><th scope="col">&#10003;</th><th scope="col">Note</th><th scope="col">Edit</th><th scope="col">Delete</th><th scope="col"><button type="button" class="btn btn-link" id="dateButton">Date and Time</button></th></tr></thead-dark>';
+    table.innerHTML ='<thead-dark><tr><th scope="col">&#10003;</th><th scope="col">Note</th><th scope="col">Edit</th><th scope="col">Delete</th><th scope="col">Date and Time</th></tr></thead-dark>';
     for (let i = 0; i < notes.length; i++) {
         table.innerHTML = table.innerHTML + '<tr><td>' +
             '<input ' +
