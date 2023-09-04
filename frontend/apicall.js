@@ -1,10 +1,14 @@
 let domain = 'http://localhost:8080';
 
 function sendNoteToServer(note) {
+    let textDate = note.dateTime.toLocaleString();
+    let tempNote = {...note};
+    tempNote.dateTime = textDate;
     const requestOptions = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(note)
+        body: JSON.stringify(tempNote)
+        
     };
 
     return fetch(domain+ '/rest/notes', requestOptions)

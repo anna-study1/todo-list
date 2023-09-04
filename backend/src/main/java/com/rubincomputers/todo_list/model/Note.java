@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @NoArgsConstructor
 @Data
@@ -28,6 +29,9 @@ public class Note extends AbstractBaseEntity {
     private Boolean isCompleted;
 
     @Column(name = "date_time", nullable = false)
+    //@JsonFormat(pattern = "MM/dd/yyyy, hh:mm:ss a")
+    @JsonFormat(pattern = "M/d/yyyy, h:mm:ss a")
+    
     private LocalDateTime dateTime;
 
 
